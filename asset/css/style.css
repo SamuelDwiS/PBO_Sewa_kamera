@@ -1,0 +1,60 @@
+/* ==== FONT LOKAL ROBOTO ==== */
+@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto-Bold.ttf') format('truetype');
+    font-weight: bold;
+  }
+  
+  /* ==== GLOBAL STYLE ==== */
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+  }
+  
+  /* ==== SIDEBAR ==== */
+  .sidebar {
+    height: 100vh;
+    background-color: #000000; /* hijau soft pastel */
+    padding-top: 20px;
+  } 
+  
+  .sidebar h4 {
+    color: #ffffff; /* teks judul lebih kontras */
+    font-weight: bold;
+  }
+  
+  .sidebar a {
+    color: #ffffff; /* teks abu gelap agar enak dibaca */
+    padding: 12px;
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s, color 0.3s;
+    border-radius: 8px;
+    margin: 4px 8px;
+    font-weight: 500;
+  }
+  
+  .sidebar a:hover {
+    background-color: #0b12ce; /* hijau lebih gelap sedikit */
+    color: white;
+  }
+  
+  /* ==== TABEL DI HALAMAN ANGGOTA ==== */
+  .table thead {
+    background-color: #7f84cd; /* hijau lebih gelap */
+    color: white;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #e6e6f4; /* efek hover lembut */
+  }
+  
+  /* ==== CONTENT AREA ==== */
+  .content {
+    padding: 20px;
+  }
+  
