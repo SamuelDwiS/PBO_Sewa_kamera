@@ -7,7 +7,7 @@
     <title>Rental Kamera - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../asset/css/style.css">
+    <link rel="stylesheet" href="asset/css/style.css">
 </head>
 
 <body>
@@ -26,14 +26,14 @@
                 <a href="index.php?page=data_transaksi" class="<?php echo (isset($_GET['page']) && $_GET['page']=='data_transaksi') ? 'active' : ''; ?>">
                     <i class="bi bi-cash-coin"></i> Data Sewa
                 </a>
+                <a href="index.php?page=data_transaksi" class="<?php echo (isset($_GET['page']) && $_GET['page']=='data_pengembalian') ? 'active' : ''; ?>">
+                    <i class="bi bi-cash-coin"></i> Data Pengembalian
+                </a>
                 <a href="index.php?page=anggota" class="<?php echo (isset($_GET['page']) && $_GET['page']=='anggota') ? 'active' : ''; ?>">
                     <i class="bi bi-people"></i> Data Customer
                 </a>
-                <a href="index.php?page=sampah" class="<?php echo (isset($_GET['page']) && $_GET['page']=='sampah') ? 'active' : ''; ?>">
-                    <i class="bi bi-recycle"></i> Kamera
-                </a>
-                <a href="index.php?page=laporan" class="<?php echo (isset($_GET['page']) && $_GET['page']=='laporan') ? 'active' : ''; ?>">
-                    <i class="bi bi-file-earmark-text"></i> Laporan
+                <a href="index.php?page=sampah" class="<?php echo (isset($_GET['page']) && $_GET['page']=='barang') ? 'active' : ''; ?>">
+                    <i class="bi bi-recycle"></i> Barang
                 </a>
                 <a href="logout.php">
                     <i class="bi bi-box-arrow-right"></i> Logout
