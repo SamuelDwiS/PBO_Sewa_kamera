@@ -23,8 +23,8 @@
                 <a href="index.php?page=transaksi" class="<?php echo (isset($_GET['page']) && $_GET['page']=='transaksi') ? 'active' : ''; ?>">
                     <i class="bi bi-cash-coin"></i> Sewa
                 </a>
-                <a href="index.php?page=data_transaksi" class="<?php echo (isset($_GET['page']) && $_GET['page']=='data_transaksi') ? 'active' : ''; ?>">
-                    <i class="bi bi-cash-coin"></i> Data Sewa
+                <a href="index.php?page=sewa" class="<?php echo (isset($_GET['page']) && $_GET['page']=='sewa') ? 'active' : ''; ?>">
+                    <i class="bi bi-cart-check"></i> Data Sewa
                 </a>
                 <a href="index.php?page=data_transaksi" class="<?php echo (isset($_GET['page']) && $_GET['page']=='data_pengembalian') ? 'active' : ''; ?>">
                     <i class="bi bi-cash-coin"></i> Data Pengembalian
@@ -51,6 +51,8 @@
                         include "transaksi.php";
                     } elseif ($page == "barang") {
                         include "barang.php";
+                    } elseif ($page == "sewa") {
+                        include "sewa.php";
                     } elseif ($page == "data_transaksi") {
                         include "data_transaksi.php";
                     } elseif ($page == "laporan") {

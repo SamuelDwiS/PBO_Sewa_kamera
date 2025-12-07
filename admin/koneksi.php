@@ -50,15 +50,16 @@ class Factory {
         }
 
         // Include file model - support folder model/
-        $modelFile = __DIR__ . '/model/' . strtolower($modelName) . '.php';
+        $adminDir = __DIR__;
+        $modelFile = $adminDir . '/model/' . strtolower($modelName) . '.php';
         
         // Fallback ke root folder jika tidak ada di model/
         if (!file_exists($modelFile)) {
-            $modelFile = __DIR__ . '/' . strtolower($modelName) . '.php';
+            $modelFile = $adminDir . '/' . strtolower($modelName) . '.php';
         }
         
         if (!file_exists($modelFile)) {
-            throw new Exception("Model file untuk '{$modelName}' tidak ditemukan");
+            throw new Exception("Model file untuk '{$modelName}' tidak ditemukan di " . $modelFile);
         }
 
         require_once $modelFile;
