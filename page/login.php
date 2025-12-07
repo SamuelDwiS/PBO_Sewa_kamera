@@ -1,50 +1,15 @@
 <?php
 require '../admin/koneksi.php';
 
-class Login extends Database
-{
-    public function auth($username, $password)
-    {
-        $sql = "SELECT * FROM tb_customer WHERE username = ?";
-        $stmt = $this->conn->prepare($sql);
-
-        if ($stmt) {
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                // Verify password
-                if (password_verify($password, $row['password'])) {
-                    return $row;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-    public function tampil() {}
-    public function tambah($data) {}
-    public function edit($id, $data) {}
-    public function hapus($id) {}
-    public function getById($id) {}
-}
-
-session_start();
-
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $login = new Login();
-    $user = $login->auth($username, $password);
+    // Gunakan factory untuk membuat model customer
+    $customer = model('customer');
+    $user = $customer->findByUsernameOrEmail($username);
 
-    if ($user) {
+    if ($user && password_verify($password, $user['password'])) {
         // Set session
         $_SESSION['id_cust'] = $user['id_cust'];
         $_SESSION['username'] = $user['username'];
@@ -56,16 +21,14 @@ if (isset($_POST['submit'])) {
         echo "<script>alert('Username atau Password Salah!'); window.location='login.php';</script>";
     }
 }
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Registrasi</title>
+    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap Online CDN -->
@@ -75,8 +38,8 @@ if (isset($_POST['submit'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-<style>
-      body {
+    <style>
+        body {
           background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
           height: 100vh;
           margin: 0;
@@ -97,11 +60,8 @@ if (isset($_POST['submit'])) {
           font-weight: 600;
           margin-bottom: 25px;
       }
-      @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px);}
-          to { opacity: 1; transform: translateY(0);}
-      }
-</style>
+
+    </style>
 </head>
 
 <body>

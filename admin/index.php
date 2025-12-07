@@ -32,7 +32,7 @@
                 <a href="index.php?page=anggota" class="<?php echo (isset($_GET['page']) && $_GET['page']=='anggota') ? 'active' : ''; ?>">
                     <i class="bi bi-people"></i> Data Customer
                 </a>
-                <a href="index.php?page=sampah" class="<?php echo (isset($_GET['page']) && $_GET['page']=='barang') ? 'active' : ''; ?>">
+                <a href="index.php?page=barang" class="<?php echo (isset($_GET['page']) && $_GET['page']=='barang') ? 'active' : ''; ?>">
                     <i class="bi bi-recycle"></i> Barang
                 </a>
                 <a href="logout.php">
@@ -49,8 +49,8 @@
                         include "anggota.php";
                     } elseif ($page == "transaksi") {
                         include "transaksi.php";
-                    } elseif ($page == "sampah") {
-                        include "sampah.php";
+                    } elseif ($page == "barang") {
+                        include "barang.php";
                     } elseif ($page == "data_transaksi") {
                         include "data_transaksi.php";
                     } elseif ($page == "laporan") {

@@ -1,40 +1,113 @@
 <?php
 require_once "koneksi.php";
 
-class Customer extends Database
+class Customer
 {
+    private $conn;
+
+    public function __construct() {
+        $this->conn = Database::getInstance()->getConnection();
+    }
 
     public function tampil()
     {
-        return $this->conn->query("SELECT * FROM t_user ORDER BY id_pelanggan DESC");
+        $sql = "SELECT * FROM tb_customer ORDER BY id_cust DESC";
+        $result = $this->conn->query($sql);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
+
     public function tambah($data)
     {
-        $stmt = $this->conn->prepare("INSERT INTO t_user (id_pelanggan, nama, alamat, email, no_telp, username, password) VALUES (?, ?, ?, ?,?)");
-        $stmt->bind_param("isss", $data['id_user'], $data['nama'], $data['alamat'], $data['email'],  $data['no_telp'], $data['username'], $data['no_tlp']);
+        $id = $this->generateId();
+        $nama = $data['nama'];
+        $email = $data['email'];
+        $username = $data['username'];
+        $password = password_hash($data['password'], PASSWORD_DEFAULT);
+        $alamat = $data['alamat'] ?? '';
+        $no_telp = $data['no_telp'] ?? '';
+
+        $stmt = $this->conn->prepare("INSERT INTO tb_customer (id_cust, nama, email, username, password, alamat, no_telp) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssss", $id, $nama, $email, $username, $password, $alamat, $no_telp);
         return $stmt->execute();
     }
 
     public function hapus($id)
     {
-        $stmt = $this->conn->prepare("DELETE FROM t_user WHERE id_user=?");
-        $stmt->bind_param("i", $id);
+        $stmt = $this->conn->prepare("DELETE FROM tb_customer WHERE id_cust=?");
+        $stmt->bind_param("s", $id);
         return $stmt->execute();
     }
 
     public function getById($id)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM t_user WHERE id_user=?");
-        $stmt->bind_param("i", $id);
+        $stmt = $this->conn->prepare("SELECT * FROM tb_customer WHERE id_cust=?");
+        $stmt->bind_param("s", $id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
 
     public function edit($id, $data)
     {
-        $stmt = $this->conn->prepare("UPDATE t_user SET nama=?, email= ?, alamat=?, email=?, no_tlp=?, username=?, password= ?, WHERE id_=?");
-        $stmt->bind_param("sssi", $data['nama'], $data['alamat'], $data['no_tlp'], $id);
+        $nama = $data['nama'];
+        $email = $data['email'];
+        $alamat = $data['alamat'] ?? '';
+        $no_telp = $data['no_telp'] ?? '';
+
+        $stmt = $this->conn->prepare("UPDATE tb_customer SET nama=?, email=?, alamat=?, no_telp=? WHERE id_cust=?");
+        $stmt->bind_param("sssss", $nama, $email, $alamat, $no_telp, $id);
         return $stmt->execute();
+    }
+
+    public function generateId()
+    {
+        $sql = "SELECT MAX(CAST(SUBSTRING(id_cust, 5) AS UNSIGNED)) as max_id FROM tb_customer WHERE id_cust LIKE 'CUST%'";
+        $result = $this->conn->query($sql);
+        $row = $result->fetch_assoc();
+        $nextId = ($row['max_id'] ?? 0) + 1;
+        return 'CUST' . str_pad($nextId, 3, '0', STR_PAD_LEFT);
+    }
+
+    public function checkUsername($username, $excludeId = null)
+    {
+        if ($excludeId) {
+            $sql = "SELECT COUNT(*) as count FROM tb_customer WHERE username = ? AND id_cust != ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ss", $username, $excludeId);
+        } else {
+            $sql = "SELECT COUNT(*) as count FROM tb_customer WHERE username = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $username);
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['count'] > 0;
+    }
+
+    public function checkEmail($email, $excludeId = null)
+    {
+        if ($excludeId) {
+            $sql = "SELECT COUNT(*) as count FROM tb_customer WHERE email = ? AND id_cust != ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ss", $email, $excludeId);
+        } else {
+            $sql = "SELECT COUNT(*) as count FROM tb_customer WHERE email = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $email);
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['count'] > 0;
+    }
+
+    public function findByUsernameOrEmail($username)
+    {
+        $sql = "SELECT * FROM tb_customer WHERE username = ? OR email = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $username, $username);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
     }
 }
 

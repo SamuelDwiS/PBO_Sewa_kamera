@@ -3,6 +3,11 @@ require '../admin/koneksi.php';
 
 class Registrasi extends Database
 {
+    private $conn;
+
+    public function __construct() {
+        $this->conn = Database::getInstance()->getConnection();
+    }
     public function tampil()
     {
         return $this->conn->query("SELECT * FROM tb_customer ORDER BY id_cust DESC");

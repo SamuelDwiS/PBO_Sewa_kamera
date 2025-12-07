@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2025 at 02:13 PM
+-- Generation Time: Dec 07, 2025 at 01:24 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,6 +37,13 @@ CREATE TABLE `tb_barang` (
   `kategori` varchar(25) NOT NULL,
   `gambar` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_barang`
+--
+
+INSERT INTO `tb_barang` (`id_barang`, `nama_barang`, `deskripsi`, `harga_sewa_hari`, `stok`, `merk`, `kategori`, `gambar`) VALUES
+('', 'EOS300', 'Ini Deskripsi Dummy', '50000', '10', '1', '1', 'image4.png');
 
 -- --------------------------------------------------------
 
@@ -95,8 +102,9 @@ CREATE TABLE `tb_detail_pengembalian` (
 --
 
 CREATE TABLE `tb_detail_sewa` (
-  `id_sewa` varchar(15) NOT NULL,
+  `no_transaksi` varchar(15) NOT NULL,
   `id_barang` varchar(15) NOT NULL,
+  `id_kategori` varchar(10) NOT NULL,
   `jumlah` int(10) NOT NULL,
   `subtotal` int(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -108,8 +116,17 @@ CREATE TABLE `tb_detail_sewa` (
 --
 
 CREATE TABLE `tb_kategori` (
+  `id_kategori` varchar(10) NOT NULL,
   `kategori` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_kategori`
+--
+
+INSERT INTO `tb_kategori` (`id_kategori`, `kategori`) VALUES
+('1', 'Kamera'),
+('2', 'Tripod');
 
 -- --------------------------------------------------------
 
@@ -121,6 +138,14 @@ CREATE TABLE `tb_merk` (
   `id_merk` varchar(8) NOT NULL,
   `merk` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_merk`
+--
+
+INSERT INTO `tb_merk` (`id_merk`, `merk`) VALUES
+('1', 'Canon'),
+('2', 'Nikon');
 
 -- --------------------------------------------------------
 
@@ -143,7 +168,7 @@ CREATE TABLE `tb_pengembalian` (
 --
 
 CREATE TABLE `tb_sewa` (
-  `id_sewa` varchar(15) NOT NULL,
+  `no_transaksi` varchar(15) NOT NULL,
   `id_cust` varchar(15) NOT NULL,
   `tgl_sewa` date NOT NULL,
   `tgl_tenggat_pengembalian` date NOT NULL,
@@ -167,6 +192,12 @@ ALTER TABLE `tb_customer`
 --
 ALTER TABLE `tb_denda`
   ADD PRIMARY KEY (`id_denda`);
+
+--
+-- Indexes for table `tb_kategori`
+--
+ALTER TABLE `tb_kategori`
+  ADD PRIMARY KEY (`id_kategori`);
 
 --
 -- Indexes for table `tb_merk`

@@ -1,5 +1,8 @@
 <?php
+require '../admin/koneksi.php';
 
+// Check login status
+$isLoggedIn = isset($_SESSION['id_cust']);
 ?>
 
 <!DOCTYPE html>
@@ -43,28 +46,42 @@
                 <ul class="navbar-nav ms-auto">
 
                     <li class="nav-item mx-2">
-                        <a class="nav-link" href="?page=sewa">
-                            <i class="bi bi-cash-stack"></i> Sewa
+                        <a class="nav-link" href="?page=daftar_kamera">
+                            <i class="bi bi-camera"></i> Daftar Kamera
                         </a>
                     </li>
 
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="?page=pengembalian">
-                            <i class="bi bi-receipt"></i> Pengembalian
-                        </a>
-                    </li>
+                    <?php if ($isLoggedIn) { ?>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="?page=sewa">
+                                <i class="bi bi-cash-stack"></i> Riwayat Sewa
+                            </a>
+                        </li>
 
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="?page=profile">
-                            <i class="bi bi-person-circle"></i> Profil
-                        </a>
-                    </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="?page=profile">
+                                <i class="bi bi-person-circle"></i> Profil
+                            </a>
+                        </li>
 
-                    <li class="nav-item mx-2">
-                        <a class="nav-link text-danger" href="logout.php">
-                            <i class="bi bi-box-arrow-right"></i> Logout
-                        </a>
-                    </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link text-danger" href="logout.php">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="login.php">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                        </li>
+
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="registrasi.php">
+                                <i class="bi bi-person-plus"></i> Registrasi
+                            </a>
+                        </li>
+                    <?php } ?>
 
                 </ul>
 
@@ -80,9 +97,21 @@
         <?php
         if (isset($_GET['page'])) {
             switch ($_GET['page']) {
-                case "layanan": include "customer_layanan.php"; break;
-                case "transaksi": include "customer_transaksi.php"; break;
-                case "profile": include "customer_profile.php"; break;
+                case "daftar_kamera": include "daftar_kamera.php"; break;
+                case "sewa": 
+                    if ($isLoggedIn) {
+                        include "riwayat_sewa.php";
+                    } else {
+                        echo '<div class="alert alert-warning text-center"><h4>Silakan login terlebih dahulu</h4><a href="login.php" class="btn btn-primary">Login</a></div>';
+                    }
+                    break;
+                case "profile": 
+                    if ($isLoggedIn) {
+                        include "profile.php";
+                    } else {
+                        echo '<div class="alert alert-warning text-center"><h4>Silakan login terlebih dahulu</h4><a href="login.php" class="btn btn-primary">Login</a></div>';
+                    }
+                    break;
                 default: 
                     ?>
                     <div class="alert alert-danger text-center">
@@ -93,23 +122,28 @@
         } else {
             ?>
             <div class="text-center">
-                <h2 class="fw-bold">Selamat Datang di Sewa Kamera</h2>
+                <h2 class="fw-bold mb-2">Selamat Datang di Sewa Kamera</h2>
+                <p class="text-muted mb-5">Sewa kamera berkualitas dengan harga terjangkau</p>
 
                 <div class="row mt-5 justify-content-center">
                     <div class="col-md-4 mb-3">
-                        <div class="card shadow-sm p-3">
-                            <i class="bi bi-camera fs-1 text-primary"></i>
-                            <h5 class="mt-3">Kamera</h5>
-                            <p class="text-muted">Pilih tipe kamera sesuai kebutuhan</p>
-                        </div>
+                        <a href="?page=daftar_kamera" class="text-decoration-none">
+                            <div class="card shadow-sm p-3 h-100 hover-card">
+                                <i class="bi bi-camera fs-1 text-primary"></i>
+                                <h5 class="mt-3">Daftar Kamera</h5>
+                                <p class="text-muted">Lihat koleksi kamera kami</p>
+                            </div>
+                        </a>
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <div class="card shadow-sm p-3">
-                            <i class="bi bi-receipt fs-1 text-primary"></i>
-                            <h5 class="mt-3">Peminjaman</h5>
-                            <p class="text-muted">Layanan Peminjaman Kamera </p>
-                        </div>
+                        <a href="login.php" class="text-decoration-none">
+                            <div class="card shadow-sm p-3 h-100 hover-card">
+                                <i class="bi bi-box-arrow-in-right fs-1 text-primary"></i>
+                                <h5 class="mt-3">Login</h5>
+                                <p class="text-muted">Masuk untuk melakukan penyewaan</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
