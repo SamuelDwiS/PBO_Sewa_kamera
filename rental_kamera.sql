@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2025 at 01:24 AM
+-- Generation Time: Dec 07, 2025 at 08:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,8 @@ CREATE TABLE `tb_barang` (
 --
 
 INSERT INTO `tb_barang` (`id_barang`, `nama_barang`, `deskripsi`, `harga_sewa_hari`, `stok`, `merk`, `kategori`, `gambar`) VALUES
-('', 'EOS300', 'Ini Deskripsi Dummy', '50000', '10', '1', '1', 'image4.png');
+('BRNG001', 'EOS301', 'Jangan Dibaca', '100000', '10', '1', '1', 'image4.png'),
+('BRNG002', 'EOS301', 'Test', '10000', '0', '1', '2', 'testimonial4.png');
 
 -- --------------------------------------------------------
 
@@ -66,7 +67,8 @@ CREATE TABLE `tb_customer` (
 --
 
 INSERT INTO `tb_customer` (`id_cust`, `nama`, `email`, `username`, `password`, `alamat`, `no_telp`) VALUES
-('CUST001', 'samuel dwi saputro', 'abcd@gmail.com', 'samuel', '$2y$10$PoVmKsjbtTjzqw1Lvn66COo1fGdDsI3IqKUgkE59oDl0dnS6uEtDK', 'Surakarta', '0896654623');
+('CUST001', 'samuel dwi saputro', 'abcd@gmail.com', 'samuel', '$2y$10$PoVmKsjbtTjzqw1Lvn66COo1fGdDsI3IqKUgkE59oDl0dnS6uEtDK', 'Surakarta', '0896654623'),
+('CUST002', 'samuel dwi saputro', 'abcd@gmail.com', 'admin', '$2y$10$fvMAgH.4ytM..VZEx9.wwu4s1MLR.9ZQt8uLkcH9HGGim3w4flhcS', 'Surakarta', '0896654623');
 
 -- --------------------------------------------------------
 
@@ -180,6 +182,12 @@ CREATE TABLE `tb_sewa` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tb_barang`
+--
+ALTER TABLE `tb_barang`
+  ADD PRIMARY KEY (`id_barang`);
 
 --
 -- Indexes for table `tb_customer`
