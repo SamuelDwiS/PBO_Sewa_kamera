@@ -27,14 +27,15 @@ switch ($action) {
             exit;
         }
 
-        // Jika sudah ada, tolak penambahan (hanya boleh satu kali sewa per barang)
+        // Jika sudah ada, update jumlahnya sesuai input (bukan tolak)
+        $tgl_mulai = $_POST['tgl_mulai_sewa'] ?? null;
+        $tgl_kembali = $_POST['tgl_kembali_est'] ?? null;
         if (isset($_SESSION['cart'][$id_barang])) {
-            echo json_encode(['success'=>false,'msg'=>'Barang sudah ada di keranjang. Tidak boleh sewa dua kali untuk barang yang sama.']);
-            exit;
+            // Update jumlah sesuai input (replace, bukan tambah)
+            $_SESSION['cart'][$id_barang]['jumlah'] = $jumlah;
+            $_SESSION['cart'][$id_barang]['tgl_mulai_sewa'] = $tgl_mulai;
+            $_SESSION['cart'][$id_barang]['tgl_kembali_est'] = $tgl_kembali;
         } else {
-            // Simpan juga tanggal mulai dan kembali jika dikirim
-            $tgl_mulai = $_POST['tgl_mulai_sewa'] ?? null;
-            $tgl_kembali = $_POST['tgl_kembali_est'] ?? null;
             $_SESSION['cart'][$id_barang] = [
                 'id_barang' => $id_barang,
                 'id_kategori' => $b['kategori'],

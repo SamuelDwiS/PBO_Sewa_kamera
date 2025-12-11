@@ -60,63 +60,38 @@ $isLoggedIn = isset($_SESSION['id_cust']);
                     <!-- Card Body -->
                     <div class="card-body">
                         <h5 class="card-title fw-bold"><?php echo htmlspecialchars($kamera['nama_barang']); ?></h5>
-                        <p class="text-muted small"><?php echo htmlspecialchars($kamera['deskripsi']); ?></p>
-
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <small class="text-muted">Merek</small>
-                                <p class="fw-bold"><?php echo htmlspecialchars($kamera['merk']); ?></p>
-                            </div>
-                            <div class="col-6">
-                                <small class="text-muted">Kategori</small>
-                                <p class="fw-bold"><?php echo htmlspecialchars($kamera['kategori']); ?></p>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <small class="text-muted">Harga/Hari</small>
-                                <p class="fw-bold text-success">Rp <?php echo number_format($kamera['harga_sewa_hari'], 0, ',', '.'); ?></p>
-                            </div>
-                            <div class="col-6">
-                                <small class="text-muted">Stok</small>
-                                <p class="fw-bold">
-                                    <?php
-                                    if ($stok > 0) {
-                                        echo '<span class="badge bg-success">' . $stok . ' tersedia</span>';
-                                    } else {
-                                        echo '<span class="badge bg-danger">Habis</span>';
-                                    }
-                                    ?>
-                                </p>
-                            </div>
+                        <div class="mb-2">
+                            <div class="fw-bold mb-1" style="font-size:1rem;">Spesifikasi:</div>
+                            <table class="table table-borderless table-sm mb-0" style="font-size:0.97rem;">
+                                <tbody>
+                                    <tr>
+                                        <td class="ps-0 pe-2 text-muted" style="width: 80px;">Merek</td>
+                                        <td class="fw-semibold text-dark">: <?php echo htmlspecialchars($kamera['merk']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-0 pe-2 text-muted">Kategori</td>
+                                        <td class="fw-semibold text-dark">: <?php echo htmlspecialchars($kamera['kategori']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-0 pe-2 text-muted">Jenis</td>
+                                        <td class="fw-semibold text-dark">: <?php echo htmlspecialchars($kamera['jenis_kamera'] ?? '-'); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-0 pe-2 text-muted">Harga/Hari</td>
+                                        <td class="fw-semibold text-success">: Rp <?php echo number_format($kamera['harga_sewa_hari'], 0, ',', '.'); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-0 pe-2 text-muted">Stok</td>
+                                        <td class="fw-semibold <?php echo ($stok > 0 ? 'text-dark' : 'text-danger'); ?>">: <?php echo ($stok > 0 ? $stok . ' tersedia' : 'Habis'); ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
                     <!-- Card Footer -->
                     <div class="card-footer bg-white">
-                        <?php if ($stok > 0) { ?>
-                            <?php if ($isLoggedIn) { ?>
-                                <button class="btn btn-primary w-100 btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalSewa"
-                                    onclick="setKameraData(
-                                        '<?php echo $kamera['id_barang']; ?>',
-                                        '<?php echo htmlspecialchars($kamera['nama_barang'], ENT_QUOTES); ?>',
-                                        '<?php echo $kamera['harga_sewa_hari']; ?>'
-                                    )">
-                                    <i class="bi bi-cart-plus"></i> Sewa Sekarang
-                                </button>
-                            <?php } else { ?>
-                                <a href="login.php" class="btn btn-primary w-100 btn-sm">
-                                    <i class="bi bi-box-arrow-in-right"></i> Login untuk Sewa
-                                </a>
-                            <?php } ?>
-                        <?php } else { ?>
-                            <button class="btn btn-secondary w-100 btn-sm" disabled>
-                                <i class="bi bi-ban"></i> Stok Habis
-                            </button>
-                        <?php } ?>
+                        <!-- Tombol Sewa Sekarang dihilangkan sesuai permintaan -->
                     </div>
 
                 </div>

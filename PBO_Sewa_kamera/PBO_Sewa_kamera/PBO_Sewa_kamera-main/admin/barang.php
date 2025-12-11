@@ -195,12 +195,23 @@ $nextId = $barang->getNextId();
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">Nama Barang</label>
                             <input type="text" class="form-control" name="nama_barang" 
                                    value="<?php echo $editData['nama_barang'] ?? ''; ?>" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Jenis Kamera</label>
+                            <select class="form-select" name="jenis_kamera" required>
+                                <option value="">-- Pilih Jenis --</option>
+                                <option value="DSLR" <?php echo (isset($editData['jenis_kamera']) && $editData['jenis_kamera'] == 'DSLR') ? 'selected' : ''; ?>>DSLR</option>
+                                <option value="Mirrorless" <?php echo (isset($editData['jenis_kamera']) && $editData['jenis_kamera'] == 'Mirrorless') ? 'selected' : ''; ?>>Mirrorless</option>
+                                <option value="Pocket" <?php echo (isset($editData['jenis_kamera']) && $editData['jenis_kamera'] == 'Pocket') ? 'selected' : ''; ?>>Pocket</option>
+                                <option value="Action Cam" <?php echo (isset($editData['jenis_kamera']) && $editData['jenis_kamera'] == 'Action Cam') ? 'selected' : ''; ?>>Action Cam</option>
+                                <option value="Camcorder" <?php echo (isset($editData['jenis_kamera']) && $editData['jenis_kamera'] == 'Camcorder') ? 'selected' : ''; ?>>Camcorder</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">Harga/Hari</label>
                             <input type="number" class="form-control" name="harga_sewa_hari" 
                                    value="<?php echo $editData['harga_sewa_hari'] ?? 0; ?>" required>

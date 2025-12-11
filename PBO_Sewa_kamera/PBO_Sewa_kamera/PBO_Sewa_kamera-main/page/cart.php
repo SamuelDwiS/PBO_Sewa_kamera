@@ -120,7 +120,21 @@ function calculateCartTotals(){
 
 document.addEventListener('DOMContentLoaded', function(){
     // attach listeners to qty inputs and date inputs
-    document.querySelectorAll('.cart-qty').forEach(inp=> inp.addEventListener('change', calculateCartTotals));
+    document.querySelectorAll('.cart-qty').forEach(inp=> {
+        inp.addEventListener('change', function(e){
+            const tr = e.target.closest('tr');
+            const id = tr.getAttribute('data-id');
+            const qty = e.target.value;
+            // update session cart via ajax
+            fetch('cart_action.php', {
+                method:'POST',
+                headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({action:'update', id_barang:id, jumlah:qty})
+            }).then(r=>r.json()).then(res=>{
+                calculateCartTotals();
+            });
+        });
+    });
     const d1 = document.getElementById('tgl_sewa');
     const d2 = document.getElementById('tgl_kembali_est');
     if (d1) d1.addEventListener('change', calculateCartTotals);

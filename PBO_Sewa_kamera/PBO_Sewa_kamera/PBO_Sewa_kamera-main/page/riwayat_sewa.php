@@ -10,14 +10,14 @@ if (!$id_cust) {
 }
 
 $conn = Database::getInstance()->getConnection();
-$sql = "SELECT ts.no_transaksi, ts.tgl_sewa, ts.tgl_tenggat_pengembalian, ts.total_harga, ts.status,
-        GROUP_CONCAT(tb.nama_barang SEPARATOR ', ') as barang, GROUP_CONCAT(tds.jumlah SEPARATOR ', ') as jumlah
-        FROM tb_sewa ts
-        JOIN tb_detail_sewa tds ON ts.no_transaksi = tds.no_transaksi
-        JOIN tb_barang tb ON tds.id_barang = tb.id_barang
-        WHERE ts.id_cust = ?
-        GROUP BY ts.no_transaksi
-        ORDER BY ts.tgl_sewa DESC";
+$sql = "SELECT ts.no_transaksi, ts.tgl_sewa, ts.tgl_tenggat_pengembalian, ts.total_harga,
+    GROUP_CONCAT(tb.nama_barang SEPARATOR ', ') as barang, GROUP_CONCAT(tds.jumlah SEPARATOR ', ') as jumlah
+    FROM tb_sewa ts
+    JOIN tb_detail_sewa tds ON ts.no_transaksi = tds.no_transaksi
+    JOIN tb_barang tb ON tds.id_barang = tb.id_barang
+    WHERE ts.id_cust = ? AND ts.status = 'Disetujui'
+    GROUP BY ts.no_transaksi
+    ORDER BY ts.tgl_sewa DESC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('s', $id_cust);
 $stmt->execute();
@@ -37,7 +37,7 @@ $result = $stmt->get_result();
                         <th>Tgl Sewa</th>
                         <th>Tgl Kembali</th>
                         <th>Total</th>
-                        <th>Status</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +50,7 @@ $result = $stmt->get_result();
                         <td><?= $row['tgl_sewa'] ?></td>
                         <td><?= $row['tgl_tenggat_pengembalian'] ?></td>
                         <td>Rp <?= number_format($row['total_harga'],0,',','.') ?></td>
-                        <td><?= htmlspecialchars($row['status']) ?></td>
+
                     </tr>
                     <?php endwhile; ?>
                 </tbody>

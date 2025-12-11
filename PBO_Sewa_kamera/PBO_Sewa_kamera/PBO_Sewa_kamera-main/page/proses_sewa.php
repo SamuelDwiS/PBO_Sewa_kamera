@@ -54,9 +54,15 @@ $conn->begin_transaction();
 
 try {
     // Generate no_transaksi
-    $row = $conn->query("SELECT MAX(CAST(SUBSTRING(no_transaksi, 4) AS UNSIGNED)) as max_id FROM tb_sewa WHERE no_transaksi LIKE 'SEW%'")->fetch_assoc();
-    $nextId = ($row['max_id'] ?? 0) + 1;
-    $no_transaksi = 'SEW' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+    // Reset ke SEW0001 jika tidak ada data sama sekali
+    $row = $conn->query("SELECT COUNT(*) as cnt FROM tb_sewa")->fetch_assoc();
+    if (($row['cnt'] ?? 0) == 0) {
+        $no_transaksi = 'SEW0001';
+    } else {
+        $row2 = $conn->query("SELECT MAX(CAST(SUBSTRING(no_transaksi, 4) AS UNSIGNED)) as max_id FROM tb_sewa WHERE no_transaksi LIKE 'SEW%'")->fetch_assoc();
+        $nextId = ($row2['max_id'] ?? 0) + 1;
+        $no_transaksi = 'SEW' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+    }
 
     // Insert header
     $status = 'Menunggu Persetujuan';

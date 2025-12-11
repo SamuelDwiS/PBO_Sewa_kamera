@@ -28,6 +28,7 @@ class Barang
     {
         $id = $this->generateId();
         $nama_barang = $data['nama_barang'];
+        $jenis_kamera = $data['jenis_kamera'] ?? '';
         $deskripsi = $data['deskripsi'] ?? '';
         $harga_sewa_hari = $data['harga_sewa_hari'] ?? 0;
         $stok = $data['stok'] ?? 0;
@@ -35,35 +36,31 @@ class Barang
         $kategori = $data['kategori'] ?? '';
         $gambar = $data['gambar'] ?? '';
 
-        $stmt = $this->conn->prepare("INSERT INTO tb_barang (id_barang, nama_barang, deskripsi, harga_sewa_hari, stok, merk, kategori, gambar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssiiiss", $id, $nama_barang, $deskripsi, $harga_sewa_hari, $stok, $merk, $kategori, $gambar);
+        $stmt = $this->conn->prepare("INSERT INTO tb_barang (id_barang, nama_barang, jenis_kamera, deskripsi, harga_sewa_hari, stok, merk, kategori, gambar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssiiiss", $id, $nama_barang, $jenis_kamera, $deskripsi, $harga_sewa_hari, $stok, $merk, $kategori, $gambar);
         return $stmt->execute();
     }
 
     public function edit($id, $data)
     {
         $nama_barang = $data['nama_barang'];
+        $jenis_kamera = $data['jenis_kamera'] ?? '';
         $deskripsi = $data['deskripsi'] ?? '';
         $harga_sewa_hari = $data['harga_sewa_hari'] ?? 0;
         $stok = $data['stok'] ?? 0;
         $merk = $data['merk'] ?? '';
         $kategori = $data['kategori'] ?? '';
 
-        $sql = "UPDATE tb_barang SET nama_barang=?, deskripsi=?, harga_sewa_hari=?, stok=?, merk=?, kategori=?";
-        $types = "ssiiis";
-        $params = [$nama_barang, $deskripsi, $harga_sewa_hari, $stok, $merk, $kategori];
-
-        // Jika ada gambar baru
+        // Cek apakah gambar diupdate
         if (isset($data['gambar']) && $data['gambar'] !== '') {
-            $sql .= ", gambar=?";
-            $types .= "s";
-            $params[] = $data['gambar'];
+            $sql = "UPDATE tb_barang SET nama_barang=?, jenis_kamera=?, deskripsi=?, harga_sewa_hari=?, stok=?, merk=?, kategori=?, gambar=? WHERE id_barang=?";
+            $types = "ssssiiiss";
+            $params = [$nama_barang, $jenis_kamera, $deskripsi, $harga_sewa_hari, $stok, $merk, $kategori, $data['gambar'], $id];
+        } else {
+            $sql = "UPDATE tb_barang SET nama_barang=?, jenis_kamera=?, deskripsi=?, harga_sewa_hari=?, stok=?, merk=?, kategori=? WHERE id_barang=?";
+            $types = "ssssiiis";
+            $params = [$nama_barang, $jenis_kamera, $deskripsi, $harga_sewa_hari, $stok, $merk, $kategori, $id];
         }
-
-        $sql .= " WHERE id_barang=?";
-        $types .= "s";
-        $params[] = $id;
-
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param($types, ...$params);
         return $stmt->execute();

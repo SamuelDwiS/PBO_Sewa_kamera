@@ -3,12 +3,13 @@
 require_once "koneksi.php";
 $koneksi = Database::getInstance()->getConnection();
 
-$sql = "SELECT ts.no_transaksi, tc.nama as nama_customer, tb.nama_barang, tds.jumlah, ts.tgl_sewa, ts.tgl_tenggat_pengembalian, ts.total_harga, ts.status
-        FROM tb_sewa ts
-        JOIN tb_customer tc ON ts.id_cust = tc.id_cust
-        JOIN tb_detail_sewa tds ON ts.no_transaksi = tds.no_transaksi
-        JOIN tb_barang tb ON tds.id_barang = tb.id_barang
-        ORDER BY ts.no_transaksi DESC";
+$sql = "SELECT ts.no_transaksi, tc.nama as nama_customer, tb.nama_barang, tds.jumlah, ts.tgl_sewa, ts.tgl_tenggat_pengembalian, ts.total_harga
+    FROM tb_sewa ts
+    JOIN tb_customer tc ON ts.id_cust = tc.id_cust
+    JOIN tb_detail_sewa tds ON ts.no_transaksi = tds.no_transaksi
+    JOIN tb_barang tb ON tds.id_barang = tb.id_barang
+    WHERE ts.status = 'Disetujui'
+    ORDER BY ts.no_transaksi DESC";
 $result = $koneksi->query($sql);
 
 ?>

@@ -1,7 +1,17 @@
 <?php
 require 'koneksi.php';
+require_once __DIR__ . '/model/barang.php';
+
 
 $db = db();
+$barangModel = new Barang();
+$daftarMerk = [];
+$resultMerk = $db->query("SELECT id_merk, merk FROM tb_merk ORDER BY merk ASC");
+if ($resultMerk) {
+    while ($row = $resultMerk->fetch_assoc()) {
+        $daftarMerk[] = $row;
+    }
+}
 
 // Handle update status
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
@@ -21,23 +31,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     }
 }
 
-// Ambil data sewa dengan join ke customer dan barang
+
+// Filter merk
+$filterMerk = $_GET['merk'] ?? '';
+
+
+
 $sql = "SELECT 
             ts.no_transaksi,
             ts.id_cust,
             tc.nama as nama_customer,
-            tds.id_barang,
-            tb.nama_barang,
+            GROUP_CONCAT(tb.nama_barang SEPARATOR ', ') as nama_barang,
+            GROUP_CONCAT(tm.merk SEPARATOR ', ') as nama_merk,
+            SUM(tds.jumlah) as jumlah,
             ts.tgl_sewa,
             ts.tgl_tenggat_pengembalian,
-            tds.jumlah,
             ts.total_harga,
             ts.status
         FROM tb_sewa ts
         JOIN tb_customer tc ON ts.id_cust = tc.id_cust
         JOIN tb_detail_sewa tds ON ts.no_transaksi = tds.no_transaksi
         JOIN tb_barang tb ON tds.id_barang = tb.id_barang
-        ORDER BY ts.no_transaksi DESC";
+        LEFT JOIN tb_merk tm ON tb.merk = tm.id_merk";
+if ($filterMerk !== '') {
+    $sql .= " WHERE tm.merk = '" . $db->real_escape_string($filterMerk) . "'";
+}
+$sql .= " GROUP BY ts.no_transaksi ORDER BY ts.no_transaksi DESC";
 
 $result = $db->query($sql);
 $daftarSewa = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
@@ -94,9 +113,23 @@ if (isset($_GET['msg'])) {
         </div>
     <?php endif; ?>
 
-    <!-- Header -->
+
+    <!-- Header & Filter Merk -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold"><i class="bi bi-cart-check"></i> Data Sewa Kamera</h2>
+        <form method="GET" action="" class="d-flex align-items-center ms-3">
+            <input type="hidden" name="page" value="sewa">
+            <label for="filterMerk" class="me-2 mb-0 fw-semibold">Filter Merk:</label>
+            <select name="merk" id="filterMerk" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                <option value="">Semua Merk</option>
+                <?php foreach ($daftarMerk as $merk): ?>
+                    <option value="<?php echo htmlspecialchars($merk['merk']); ?>" <?php if ($filterMerk === $merk['merk']) echo 'selected'; ?>><?php echo htmlspecialchars($merk['merk']); ?></option>
+                <?php endforeach; ?>
+            </select>
+            <?php if ($filterMerk !== ''): ?>
+                <a href="index.php?page=sewa" class="btn btn-sm btn-outline-secondary">Reset</a>
+            <?php endif; ?>
+        </form>
     </div>
 
     <!-- Tabel Sewa -->
@@ -108,6 +141,7 @@ if (isset($_GET['msg'])) {
                         <th>No Transaksi</th>
                         <th>Customer</th>
                         <th>Barang</th>
+                        <th>Merk</th>
                         <th>Jumlah</th>
                         <th>Tgl Mulai</th>
                         <th>Tgl Kembali</th>
@@ -130,6 +164,7 @@ if (isset($_GET['msg'])) {
                                     <br><small class="text-muted"><?php echo $item['id_cust']; ?></small>
                                 </td>
                                 <td><?php echo $item['nama_barang']; ?></td>
+                                <td><?php echo htmlspecialchars($item['nama_merk'] ?? $item['merk']); ?></td>
                                 <td class="text-center"><?php echo $item['jumlah']; ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($item['tgl_sewa'])); ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($item['tgl_tenggat_pengembalian'])); ?></td>
