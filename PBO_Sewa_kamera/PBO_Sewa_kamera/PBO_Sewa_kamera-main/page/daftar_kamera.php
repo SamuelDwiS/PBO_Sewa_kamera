@@ -9,9 +9,9 @@ $conn = db();
 
 // Query dengan JOIN untuk ambil nama merek dan kategori
 $sql = "SELECT b.*, m.merk AS merk, k.kategori AS kategori
-        FROM tb_barang b
-        LEFT JOIN tb_merk m ON b.merk = m.id_merk
-        LEFT JOIN tb_kategori k ON b.kategori = k.id_kategori";
+    FROM tb_barang b
+    LEFT JOIN tb_merk m ON b.merk = m.id_merk
+    LEFT JOIN tb_kategori k ON b.kategori = k.id_kategori";
 
 $result = $conn->query($sql);
 

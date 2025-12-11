@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['simpan']) || isset($_POST['update'])) {
         $data = [
             'nama_barang' => $nama_barang,
+            'jenis_kamera' => $_POST['jenis_kamera'] ?? '',
             'deskripsi' => $deskripsi,
             'harga_sewa_hari' => $harga_sewa_hari,
             'stok' => $stok,
